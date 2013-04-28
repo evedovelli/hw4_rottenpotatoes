@@ -6,6 +6,16 @@ class MoviesController < ApplicationController
     # will render app/views/movies/show.<extension> by default
   end
 
+  def director
+    id = params[:id] # retrieve movie ID from URI route
+    movie = Movie.find(id)
+    @movies = Movie.find_director_movies(movie.director)
+    if @movies.length == 0 then
+      flash[:notice] = "'#{movie.title}' has no director info"
+      redirect_to movies_path and return
+    end
+  end
+
   def index
     sort = params[:sort] || session[:sort]
     case sort
